@@ -1,0 +1,73 @@
+.material-drop {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translate(-50%, -50%);
+  animation: material-fly-up 2s ease-out forwards;
+}
+
+.material-drop__icon {
+  filter: drop-shadow(0 0 10px rgba(153, 69, 255, 0.8));
+  animation: material-pulse 0.5s ease-in-out;
+}
+
+.material-drop__label {
+  font-family: var(--font-minecraft);
+  font-size: 0.875rem;
+  color: var(--color-gold);
+  text-shadow: 
+    2px 2px 0px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.6);
+  white-space: nowrap;
+  font-weight: bold;
+  animation: label-fade 2s ease-out forwards;
+}
+
+@keyframes material-fly-up {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+  }
+  20% {
+    transform: translateY(-20px) scale(1);
+  }
+  100% {
+    transform: translateY(-150px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes material-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes label-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

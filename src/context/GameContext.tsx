@@ -373,12 +373,34 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     case 'CLICK': {
       if (state.energy < 1) return state;
       const dpc = calculateDpc(state);
+      
+      // Material drop chance on click (5% chance)
+      let newMaterials = [...state.materials];
+      let materialGain = 0;
+      if (Math.random() < 0.05) {
+        // Weighted random: common materials more likely
+        const rand = Math.random();
+        let materialIndex;
+        if (rand < 0.4) materialIndex = 0; // 40% wood
+        else if (rand < 0.7) materialIndex = 1; // 30% stone
+        else if (rand < 0.85) materialIndex = 2; // 15% iron
+        else if (rand < 0.95) materialIndex = 3; // 10% gold
+        else materialIndex = 4; // 5% void essence
+        
+        newMaterials = newMaterials.map((m, i) => 
+          i === materialIndex ? { ...m, count: m.count + 1 } : m
+        );
+        materialGain = 1;
+      }
+      
       return {
         ...state,
         essence: state.essence + dpc,
         totalEssence: state.totalEssence + dpc,
         totalClicks: state.totalClicks + 1,
         energy: state.energy - 1,
+        materials: newMaterials,
+        totalMaterials: state.totalMaterials + materialGain,
       };
     }
 
@@ -391,6 +413,10 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     }
 
     case 'TICK': {
+      // Calculate DPS gain (only when actively playing, deltaTime is small)
+      const dps = calculateDps(state);
+      const dpsGain = (dps * action.deltaTime) / 1000;
+
       // Update ability cooldowns
       const updatedAbilities = state.abilities.map(ability => ({
         ...ability,
@@ -410,6 +436,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
       return {
         ...state,
+        essence: state.essence + dpsGain,
+        totalEssence: state.totalEssence + dpsGain,
         abilities: updatedAbilities,
         materials: newMaterials,
         totalMaterials: state.totalMaterials + materialGain,

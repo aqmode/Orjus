@@ -1,7 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGame } from '../../context/GameContext';
 import CloudSave, { useManualSave } from '../../components/CloudSave/CloudSave';
+import MaterialDrop from '../../components/MaterialDrop';
 import './Game.css';
+
+interface MaterialDropData {
+  id: string;
+  materialName: string;
+  materialEmoji: string;
+  iconName: string;
+  x: number;
+  y: number;
+}
 
 const Game = () => {
   const { state, dispatch, getDpc, getDps, formatNumber, getUpgradeCost, getRebirthCost, getRebirthPointsPreview } = useGame();
@@ -10,9 +20,81 @@ const Game = () => {
   // Save button state
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
   
+  // Material drops animation
+  const [materialDrops, setMaterialDrops] = useState<MaterialDropData[]>([]);
+  const clickButtonRef = useRef<HTMLButtonElement>(null);
+  
   // CPS (Clicks Per Second) tracking
   const [cps, setCps] = useState(0);
   const clickTimestamps = useRef<number[]>([]);
+  // Track material count to detect new drops
+  const prevMaterialsRef = useRef(state.totalMaterials);
+
+  // Material icon mapping (matches GameContext material IDs)
+  const materialIconMap: { [key: string]: { emoji: string; iconName: string } } = {
+    wood: { emoji: '🪵', iconName: 'material-wood' },
+    stone: { emoji: '🪨', iconName: 'material-stone' },
+    iron: { emoji: '⚙️', iconName: 'material-iron' },
+    gold: { emoji: '🏆', iconName: 'material-gold' },
+    diamond: { emoji: '💎', iconName: 'material-diamond' },
+    voidEssence: { emoji: '🌑', iconName: 'material-void-essence' },
+    emerald: { emoji: '�', iconName: 'material-emerald' },
+    ruby: { emoji: '❤️', iconName: 'material-ruby' },
+    obsidian: { emoji: '⬛', iconName: 'material-obsidian' },
+    starShard: { emoji: '⭐', iconName: 'material-star-shard' },
+    core: { emoji: '�', iconName: 'material-core' },
+    woodBlock: { emoji: '🟫', iconName: 'material-wood-block' },
+    stoneBrick: { emoji: '⬜', iconName: 'material-stone-brick' },
+    ironIngot: { emoji: '🔩', iconName: 'material-iron-ingot' },
+    goldIngot: { emoji: '🥇', iconName: 'material-gold-ingot' },
+    diamondShard: { emoji: '�', iconName: 'material-diamond-shard' },
+    voidCrystal: { emoji: '🔮', iconName: 'material-void-crystal' },
+    starFragment: { emoji: '✨', iconName: 'material-star-fragment' },
+    voidCore: { emoji: '⚫', iconName: 'material-void-core' },
+  };
+
+  // Detect material drops
+  useEffect(() => {
+    if (state.totalMaterials > prevMaterialsRef.current) {
+      console.log('🎁 Material dropped! Total:', state.totalMaterials);
+      
+      // Find which material increased
+      const droppedMaterial = state.materials.find((mat, idx) => {
+        const prevCount = prevMaterialsRef.current > 0 ? state.materials[idx].count - 1 : 0;
+        return mat.count > prevCount;
+      });
+
+      if (droppedMaterial && clickButtonRef.current) {
+        const rect = clickButtonRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const iconData = materialIconMap[droppedMaterial.id] || { 
+          emoji: '💎', 
+          iconName: `material-${droppedMaterial.id}` 
+        };
+
+        console.log('✨ Creating animation at', centerX, centerY, 'for', droppedMaterial.name);
+
+        setMaterialDrops(prev => [
+          ...prev,
+          {
+            id: `${Date.now()}-${Math.random()}`,
+            materialName: droppedMaterial.name,
+            materialEmoji: iconData.emoji,
+            iconName: iconData.iconName,
+            x: centerX,
+            y: centerY,
+          }
+        ]);
+      }
+    }
+    prevMaterialsRef.current = state.totalMaterials;
+  }, [state.totalMaterials, state.materials]);
+
+  const removeMaterialDrop = (id: string) => {
+    setMaterialDrops(prev => prev.filter(drop => drop.id !== id));
+  };
 
   // Calculate CPS every 100ms
   useEffect(() => {
@@ -120,6 +202,7 @@ const Game = () => {
         <div className="click-section">
           <div className="clicker-container">
             <button 
+              ref={clickButtonRef}
               className={`click-button ${state.energy > 0 ? 'active' : 'disabled'}`}
               onClick={handleClick}
               disabled={state.energy < 1}
@@ -353,6 +436,19 @@ const Game = () => {
           </div>
         </div>
       </div>
+      
+      {/* Material Drop Animations */}
+      {materialDrops.map(drop => (
+        <MaterialDrop
+          key={drop.id}
+          materialName={drop.materialName}
+          materialEmoji={drop.materialEmoji}
+          iconName={drop.iconName}
+          x={drop.x}
+          y={drop.y}
+          onComplete={() => removeMaterialDrop(drop.id)}
+        />
+      ))}
     </div>
   );
 };
