@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useGame } from '../../context/GameContext';
+import { useGame, ABILITY_UPGRADE_COSTS, COOLDOWN_REDUCTIONS } from '../../context/GameContext';
 import CloudSave, { useManualSave } from '../../components/CloudSave/CloudSave';
 import MaterialDrop from '../../components/MaterialDrop';
 import './Game.css';
@@ -29,6 +29,12 @@ const Game = () => {
   const clickTimestamps = useRef<number[]>([]);
   // Track material count to detect new drops
   const prevMaterialsRef = useRef(state.totalMaterials);
+
+  // Anti-autoclicker
+  const [showAutoclickerWarning, setShowAutoclickerWarning] = useState(false);
+  const [warningTimer, setWarningTimer] = useState(5);
+  const cpsHistory = useRef<number[]>([]);
+  const suspiciousStartTime = useRef<number | null>(null);
 
   // Material icon mapping (matches GameContext material IDs)
   const materialIconMap: { [key: string]: { emoji: string; iconName: string } } = {
@@ -102,10 +108,54 @@ const Game = () => {
       const now = Date.now();
       // Keep only clicks from last second
       clickTimestamps.current = clickTimestamps.current.filter(t => now - t < 1000);
-      setCps(clickTimestamps.current.length);
+      const currentCps = clickTimestamps.current.length;
+      setCps(currentCps);
+      
+      // Anti-autoclicker detection
+      if (currentCps >= 9 && currentCps <= 11) {
+        // Track CPS history for suspicious pattern detection
+        cpsHistory.current.push(currentCps);
+        // Keep last 150 entries (15 seconds at 100ms intervals)
+        if (cpsHistory.current.length > 150) {
+          cpsHistory.current.shift();
+        }
+        
+        // Check if CPS has been constant (9-11) for 15 seconds
+        if (cpsHistory.current.length >= 150) {
+          const allSuspicious = cpsHistory.current.every(c => c >= 9 && c <= 11);
+          const isConstant = cpsHistory.current.every(c => c === cpsHistory.current[0]);
+          
+          if (allSuspicious && isConstant && !showAutoclickerWarning) {
+            setShowAutoclickerWarning(true);
+            setWarningTimer(5);
+            cpsHistory.current = []; // Reset history
+          }
+        }
+      } else {
+        // Reset tracking if CPS is outside suspicious range
+        cpsHistory.current = [];
+        suspiciousStartTime.current = null;
+      }
     }, 100);
     return () => clearInterval(interval);
-  }, []);
+  }, [showAutoclickerWarning]);
+
+  // Warning timer countdown
+  useEffect(() => {
+    if (showAutoclickerWarning && warningTimer > 0) {
+      const timer = setTimeout(() => {
+        setWarningTimer(prev => prev - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showAutoclickerWarning, warningTimer]);
+
+  const closeAutoclickerWarning = () => {
+    if (warningTimer <= 0) {
+      setShowAutoclickerWarning(false);
+      setWarningTimer(5);
+    }
+  };
 
   const handleClick = () => {
     clickTimestamps.current.push(Date.now());
@@ -150,6 +200,25 @@ const Game = () => {
 
   return (
     <div className="game-page">
+      {/* Anti-Autoclicker Warning Modal */}
+      {showAutoclickerWarning && (
+        <div className="autoclicker-modal-overlay">
+          <div className="autoclicker-modal">
+            <div className="autoclicker-icon">🚫</div>
+            <h2>Обнаружен автокликер!</h2>
+            <p>Пожалуйста, отключите автокликер для честной игры.</p>
+            <p className="autoclicker-subtext">Использование автокликера нарушает правила игры и портит удовольствие от игрового процесса.</p>
+            <button 
+              className={`autoclicker-close-btn ${warningTimer > 0 ? 'disabled' : ''}`}
+              onClick={closeAutoclickerWarning}
+              disabled={warningTimer > 0}
+            >
+              {warningTimer > 0 ? `Подождите ${warningTimer} сек...` : 'Закрыть'}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Cloud Save */}
       <CloudSave />
       
@@ -220,6 +289,99 @@ const Game = () => {
             </div>
           </div>
 
+        </div>
+
+        {/* Abilities Section */}
+        <div className="abilities-section">
+          <h3>⚡ Способности <span className="abilities-rp">RP: {state.rebirthPoints}</span></h3>
+          <div className="abilities-grid">
+            {state.abilities.map(ability => {
+              // Safety checks for migration
+              if (!ability.dpsMultipliers) return null;
+              
+              const isLocked = !ability.isUnlocked;
+              const isOnCooldown = ability.currentCooldown > 0;
+              const currentDpsMultiplier = ability.dpsMultipliers[ability.dpsLevel] || 1;
+              const nextDpsMultiplier = ability.dpsLevel < 5 ? ability.dpsMultipliers[ability.dpsLevel + 1] : null;
+              const dpsUpgradeCost = ability.dpsLevel < 5 ? ABILITY_UPGRADE_COSTS[ability.dpsLevel] : null;
+              
+              const currentCooldown = ability.baseCooldown - COOLDOWN_REDUCTIONS.slice(0, ability.cooldownLevel + 1).reduce((a, b) => a + b, 0);
+              const nextCooldownReduction = ability.cooldownLevel < 5 ? COOLDOWN_REDUCTIONS[ability.cooldownLevel + 1] : null;
+              const cooldownUpgradeCost = ability.cooldownLevel < 5 ? ABILITY_UPGRADE_COSTS[ability.cooldownLevel] : null;
+              
+              const canUpgradeDps = !isLocked && ability.dpsLevel < 5 && state.rebirthPoints >= (dpsUpgradeCost || 0);
+              const canUpgradeCooldown = !isLocked && ability.cooldownLevel < 5 && state.rebirthPoints >= (cooldownUpgradeCost || 0);
+              
+              return (
+                <div key={ability.id} className={`ability-card ${isLocked ? 'locked' : ''} ${isOnCooldown ? 'on-cooldown' : ''}`}>
+                  <div className="ability-header">
+                    <span className="ability-icon">{ability.icon}</span>
+                    <span className="ability-name">{ability.name}</span>
+                  </div>
+                  
+                  {isLocked ? (
+                    <div className="ability-locked">
+                      <span className="lock-icon">🔒</span>
+                      <span className="unlock-req">Перерождение {ability.requiredRebirthLevel}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <button 
+                        className={`ability-use-btn ${isOnCooldown ? 'disabled' : ''}`}
+                        onClick={() => dispatch({ type: 'USE_ABILITY', abilityId: ability.id })}
+                        disabled={isOnCooldown}
+                      >
+                        {isOnCooldown 
+                          ? `⏱️ ${ability.currentCooldown.toFixed(1)}с` 
+                          : `⚔️ Использовать (x${currentDpsMultiplier})`
+                        }
+                      </button>
+                      
+                      <div className="ability-upgrades">
+                        {/* DPS Upgrade */}
+                        <div className="ability-upgrade-row">
+                          <span className="upgrade-label">
+                            Урон: x{currentDpsMultiplier}
+                            {nextDpsMultiplier && <span className="next-value"> → x{nextDpsMultiplier}</span>}
+                          </span>
+                          {dpsUpgradeCost !== null ? (
+                            <button 
+                              className={`ability-upgrade-btn ${canUpgradeDps ? 'affordable' : ''}`}
+                              onClick={() => dispatch({ type: 'UPGRADE_ABILITY_DPS', abilityId: ability.id })}
+                              disabled={!canUpgradeDps}
+                            >
+                              {dpsUpgradeCost} RP
+                            </button>
+                          ) : (
+                            <span className="maxed">MAX</span>
+                          )}
+                        </div>
+                        
+                        {/* Cooldown Upgrade */}
+                        <div className="ability-upgrade-row">
+                          <span className="upgrade-label">
+                            КД: {currentCooldown.toFixed(1)}с
+                            {nextCooldownReduction && <span className="next-value"> → -{nextCooldownReduction}с</span>}
+                          </span>
+                          {cooldownUpgradeCost !== null ? (
+                            <button 
+                              className={`ability-upgrade-btn ${canUpgradeCooldown ? 'affordable' : ''}`}
+                              onClick={() => dispatch({ type: 'UPGRADE_ABILITY_COOLDOWN', abilityId: ability.id })}
+                              disabled={!canUpgradeCooldown}
+                            >
+                              {cooldownUpgradeCost} RP
+                            </button>
+                          ) : (
+                            <span className="maxed">MAX</span>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Upgrades Section */}

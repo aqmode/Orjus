@@ -70,8 +70,7 @@ const Login: React.FC = () => {
       <div className="login-container">
         <div className="login-header">
           <h1 className="login-logo">
-            <span className="logo-void">Void</span>
-            <span className="logo-clicker">Clicker</span>
+            <span className="logo-orjus">Orjus</span>
           </h1>
           <p className="login-subtitle">
             {isSignUp ? 'Создайте аккаунт' : 'Войдите в игру'}
@@ -173,7 +172,7 @@ const Login: React.FC = () => {
         </div>
 
         <p className="server-note">
-          Часть вселенной <span className="highlight">Orjus Adventure</span>
+          Часть вселенной <span className="highlight">Orjus</span>
         </p>
       </div>
     </div>

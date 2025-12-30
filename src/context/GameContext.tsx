@@ -16,17 +16,24 @@ export interface Ability {
   id: string;
   name: string;
   icon: string;
-  baseDamageMultiplier: number;
-  damagePerLevel: number;
-  baseCooldown: number;
-  cooldownReductionPerLevel: number;
-  maxLevel: number;
-  upgradeCost: number;
-  level: number;
-  requiredRebirthLevel: number;
-  currentCooldown: number;
+  requiredRebirthLevel: number; // Уровень перерождения для открытия (2, 5, 10, 15)
   isUnlocked: boolean;
+  
+  // Перезарядка (улучшается через RP)
+  cooldownLevel: number; // 0-5
+  baseCooldown: number; // Базовый кулдаун 5 сек
+  currentCooldown: number; // Текущий таймер кулдауна
+  
+  // DPS множитель (улучшается через RP)
+  dpsLevel: number; // 0-5
+  dpsMultipliers: number[]; // Множители для уровней 0-5
 }
+
+// Стоимость улучшений способностей (одинаковая для всех) - в RP
+export const ABILITY_UPGRADE_COSTS = [1, 2, 4, 8, 16]; // Стоимость для уровней 1-5
+
+// Сокращение перезарядки по уровням (накапливается)
+export const COOLDOWN_REDUCTIONS = [0, 0.2, 0.4, 0.8, 1.6, 3.2]; // Уровень 0-5
 
 export interface Material {
   id: string;
@@ -85,6 +92,7 @@ export interface GameState {
   // Materials
   materials: Material[];
   totalMaterials: number;
+  craftedItems: { [materialId: string]: number }; // Количество скрафченных предметов по ID
   
   // Achievements
   achievements: Achievement[];
@@ -97,32 +105,81 @@ export interface GameState {
 
 // Initial Data
 const initialUpgrades: Upgrade[] = [
-  { id: 'dpc1', name: 'Малый удар', description: '+1 урона за клик', baseCost: 50, costMultiplier: 1.15, value: 1, count: 0, type: 'dpc' },
-  { id: 'dpc2', name: 'Удар', description: '+3 урона за клик', baseCost: 150, costMultiplier: 1.15, value: 3, count: 0, type: 'dpc' },
-  { id: 'dpc3', name: 'Сильный удар', description: '+10 урона за клик', baseCost: 400, costMultiplier: 1.15, value: 10, count: 0, type: 'dpc' },
-  { id: 'dpc4', name: 'Огромный удар', description: '+50 урона за клик', baseCost: 1500, costMultiplier: 1.15, value: 50, count: 0, type: 'dpc' },
-  { id: 'dpc5', name: 'Божественный удар', description: '+250 урона за клик', baseCost: 7500, costMultiplier: 1.15, value: 250, count: 0, type: 'dpc' },
-  { id: 'dps1', name: 'Малый тотем', description: '+1 урона в секунду', baseCost: 40, costMultiplier: 1.15, value: 1, count: 0, type: 'dps' },
-  { id: 'dps2', name: 'Тотем', description: '+3 урона в секунду', baseCost: 130, costMultiplier: 1.15, value: 3, count: 0, type: 'dps' },
-  { id: 'dps3', name: 'Сильный тотем', description: '+10 урона в секунду', baseCost: 350, costMultiplier: 1.15, value: 10, count: 0, type: 'dps' },
-  { id: 'dps4', name: 'Огромный тотем', description: '+50 урона в секунду', baseCost: 1300, costMultiplier: 1.15, value: 50, count: 0, type: 'dps' },
-  { id: 'dps5', name: 'Божественный тотем', description: '+250 урона в секунду', baseCost: 6500, costMultiplier: 1.15, value: 250, count: 0, type: 'dps' },
-  // Energy upgrades
-  { id: 'energy1', name: 'Расширение энергии', description: '+5 к макс. энергии', baseCost: 200, costMultiplier: 1.25, value: 5, count: 0, type: 'energy_max' },
-  { id: 'energy2', name: 'Большой запас', description: '+10 к макс. энергии', baseCost: 800, costMultiplier: 1.25, value: 10, count: 0, type: 'energy_max' },
-  { id: 'energy3', name: 'Огромный запас', description: '+25 к макс. энергии', baseCost: 3000, costMultiplier: 1.25, value: 25, count: 0, type: 'energy_max' },
-  { id: 'regen1', name: 'Быстрое восстановление', description: '-50мс к регенерации', baseCost: 300, costMultiplier: 1.30, value: 50, count: 0, type: 'energy_regen' },
-  { id: 'regen2', name: 'Ускоренный поток', description: '-75мс к регенерации', baseCost: 1200, costMultiplier: 1.30, value: 75, count: 0, type: 'energy_regen' },
-  { id: 'regen3', name: 'Мгновенная регенерация', description: '-100мс к регенерации', baseCost: 5000, costMultiplier: 1.30, value: 100, count: 0, type: 'energy_regen' },
+  // DPC - урон за клик (основной источник дохода в начале)
+  { id: 'dpc1', name: 'Малый удар', description: '+1 урона за клик', baseCost: 15, costMultiplier: 1.12, value: 1, count: 0, type: 'dpc' },
+  { id: 'dpc2', name: 'Удар', description: '+5 урона за клик', baseCost: 100, costMultiplier: 1.13, value: 5, count: 0, type: 'dpc' },
+  { id: 'dpc3', name: 'Сильный удар', description: '+25 урона за клик', baseCost: 500, costMultiplier: 1.14, value: 25, count: 0, type: 'dpc' },
+  { id: 'dpc4', name: 'Огромный удар', description: '+100 урона за клик', baseCost: 3000, costMultiplier: 1.15, value: 100, count: 0, type: 'dpc' },
+  { id: 'dpc5', name: 'Божественный удар', description: '+500 урона за клик', baseCost: 20000, costMultiplier: 1.16, value: 500, count: 0, type: 'dpc' },
+  
+  // DPS - пассивный доход (становится важнее со временем)
+  { id: 'dps1', name: 'Малый тотем', description: '+1 урона в секунду', baseCost: 50, costMultiplier: 1.13, value: 1, count: 0, type: 'dps' },
+  { id: 'dps2', name: 'Тотем', description: '+5 урона в секунду', baseCost: 300, costMultiplier: 1.14, value: 5, count: 0, type: 'dps' },
+  { id: 'dps3', name: 'Сильный тотем', description: '+25 урона в секунду', baseCost: 1500, costMultiplier: 1.15, value: 25, count: 0, type: 'dps' },
+  { id: 'dps4', name: 'Огромный тотем', description: '+100 урона в секунду', baseCost: 10000, costMultiplier: 1.16, value: 100, count: 0, type: 'dps' },
+  { id: 'dps5', name: 'Божественный тотем', description: '+500 урона в секунду', baseCost: 75000, costMultiplier: 1.17, value: 500, count: 0, type: 'dps' },
+  
+  // Energy Max - увеличивает запас кликов
+  { id: 'energy1', name: 'Расширение энергии', description: '+3 к макс. энергии', baseCost: 100, costMultiplier: 1.20, value: 3, count: 0, type: 'energy_max' },
+  { id: 'energy2', name: 'Большой запас', description: '+5 к макс. энергии', baseCost: 500, costMultiplier: 1.22, value: 5, count: 0, type: 'energy_max' },
+  { id: 'energy3', name: 'Огромный запас', description: '+10 к макс. энергии', baseCost: 2500, costMultiplier: 1.25, value: 10, count: 0, type: 'energy_max' },
+  
+  // Energy Regen - ускоряет восстановление (очень ценно)
+  { id: 'regen1', name: 'Быстрое восстановление', description: '-2мс к регенерации', baseCost: 200, costMultiplier: 1.25, value: 2, count: 0, type: 'energy_regen' },
+  { id: 'regen2', name: 'Ускоренный поток', description: '-3мс к регенерации', baseCost: 1000, costMultiplier: 1.28, value: 3, count: 0, type: 'energy_regen' },
+  { id: 'regen3', name: 'Мгновенная регенерация', description: '-4мс к регенерации', baseCost: 5000, costMultiplier: 1.30, value: 4, count: 0, type: 'energy_regen' },
 ];
 
+// 4 способности с прокачкой через очки перерождений (RP)
 const initialAbilities: Ability[] = [
-  { id: 'ability1', name: 'Супер удар', icon: '⚡', baseDamageMultiplier: 3, damagePerLevel: 0.5, baseCooldown: 5, cooldownReductionPerLevel: 0.1, maxLevel: 10, upgradeCost: 2, level: 0, requiredRebirthLevel: 0, currentCooldown: 0, isUnlocked: true },
-  { id: 'ability2', name: 'Мега удар', icon: '💥', baseDamageMultiplier: 5, damagePerLevel: 1, baseCooldown: 8, cooldownReductionPerLevel: 0.15, maxLevel: 10, upgradeCost: 3, level: 0, requiredRebirthLevel: 3, currentCooldown: 0, isUnlocked: false },
-  { id: 'ability3', name: 'Инферно', icon: '🔥', baseDamageMultiplier: 7, damagePerLevel: 1.5, baseCooldown: 10, cooldownReductionPerLevel: 0.2, maxLevel: 10, upgradeCost: 4, level: 0, requiredRebirthLevel: 7, currentCooldown: 0, isUnlocked: false },
-  { id: 'ability4', name: 'Взрыв Пустоты', icon: '🌑', baseDamageMultiplier: 9, damagePerLevel: 2, baseCooldown: 12, cooldownReductionPerLevel: 0.25, maxLevel: 10, upgradeCost: 5, level: 0, requiredRebirthLevel: 12, currentCooldown: 0, isUnlocked: false },
-  { id: 'ability5', name: 'Небесный гнев', icon: '✨', baseDamageMultiplier: 11, damagePerLevel: 2.5, baseCooldown: 15, cooldownReductionPerLevel: 0.3, maxLevel: 10, upgradeCost: 6, level: 0, requiredRebirthLevel: 20, currentCooldown: 0, isUnlocked: false },
-  { id: 'ability6', name: 'Размерный разлом', icon: '⚔️', baseDamageMultiplier: 13, damagePerLevel: 3, baseCooldown: 20, cooldownReductionPerLevel: 0.4, maxLevel: 10, upgradeCost: 7, level: 0, requiredRebirthLevel: 30, currentCooldown: 0, isUnlocked: false },
+  { 
+    id: 'ability1', 
+    name: 'Удар Молнии', 
+    icon: '⚡', 
+    requiredRebirthLevel: 2,  // Открывается на 2 уровне перерождения
+    isUnlocked: false,
+    cooldownLevel: 0,
+    baseCooldown: 5,
+    currentCooldown: 0,
+    dpsLevel: 0,
+    dpsMultipliers: [1, 5, 7, 10, 13, 15]  // x1, x5, x7, x10, x13, x15
+  },
+  { 
+    id: 'ability2', 
+    name: 'Огненный шторм', 
+    icon: '�', 
+    requiredRebirthLevel: 5,  // Открывается на 5 уровне перерождения
+    isUnlocked: false,
+    cooldownLevel: 0,
+    baseCooldown: 5,
+    currentCooldown: 0,
+    dpsLevel: 0,
+    dpsMultipliers: [1, 7, 10, 15, 20, 23]  // x1, x7, x10, x15, x20, x23
+  },
+  { 
+    id: 'ability3', 
+    name: 'Взрыв Пустоты', 
+    icon: '🌑', 
+    requiredRebirthLevel: 10,  // Открывается на 10 уровне перерождения
+    isUnlocked: false,
+    cooldownLevel: 0,
+    baseCooldown: 5,
+    currentCooldown: 0,
+    dpsLevel: 0,
+    dpsMultipliers: [1, 15, 20, 23, 25, 30]  // x1, x15, x20, x23, x25, x30
+  },
+  { 
+    id: 'ability4', 
+    name: 'Небесный гнев', 
+    icon: '✨', 
+    requiredRebirthLevel: 15,  // Открывается на 15 уровне перерождения
+    isUnlocked: false,
+    cooldownLevel: 0,
+    baseCooldown: 5,
+    currentCooldown: 0,
+    dpsLevel: 0,
+    dpsMultipliers: [1, 16, 20, 25, 30, 35]  // x1, x16, x20, x25, x30, x35
+  },
 ];
 
 const initialMaterials: Material[] = [
@@ -299,9 +356,9 @@ const initialState: GameState = {
   essence: 0,
   totalEssence: 0,
   totalClicks: 0,
-  energy: 20,
-  maxEnergy: 20,
-  energyRegenRate: 500, // 500ms = 0.5 seconds between regen
+  energy: 10,
+  maxEnergy: 10,
+  energyRegenRate: 400, // 400ms = 2.5 энергии в секунду
   baseDpc: 1,
   baseDps: 0,
   rebirthLevel: 0,
@@ -313,6 +370,7 @@ const initialState: GameState = {
   selectedAbilityId: 'ability1',
   materials: initialMaterials,
   totalMaterials: 0,
+  craftedItems: {},
   achievements: initialAchievements,
   achievementPoints: 0,
   lastSaveTime: Date.now(),
@@ -328,7 +386,8 @@ type GameAction =
   | { type: 'BUY_UPGRADE'; upgradeId: string }
   | { type: 'TOGGLE_AUTO_BUY'; upgradeId: string }
   | { type: 'USE_ABILITY'; abilityId: string }
-  | { type: 'UPGRADE_ABILITY'; abilityId: string }
+  | { type: 'UPGRADE_ABILITY_DPS'; abilityId: string }
+  | { type: 'UPGRADE_ABILITY_COOLDOWN'; abilityId: string }
   | { type: 'SELECT_ABILITY'; abilityId: string }
   | { type: 'REBIRTH' }
   | { type: 'ADD_MATERIAL'; materialId: string; amount: number }
@@ -357,14 +416,38 @@ const calculateDps = (state: GameState): number => {
 };
 
 const calculateRebirthCost = (level: number): number => {
-  return 10000000 * Math.pow(10, level);
+  // Первое перерождение: 100K, потом x5 каждый уровень
+  return 100000 * Math.pow(5, level);
 };
 
 const calculateRebirthPoints = (state: GameState): number => {
-  const essenceBonus = Math.floor(Math.log10(state.totalEssence + 1));
-  const clickBonus = Math.floor(state.totalClicks / 10000);
-  const upgradeBonus = state.upgrades.reduce((sum, u) => sum + u.count, 0);
+  // Больше очков за прогресс
+  const essenceBonus = Math.floor(Math.log10(Math.max(1, state.totalEssence)) * 0.5);
+  const clickBonus = Math.floor(state.totalClicks / 5000);
+  const upgradeBonus = Math.floor(state.upgrades.reduce((sum, u) => sum + u.count, 0) * 0.3);
   return Math.max(1, essenceBonus + clickBonus + upgradeBonus);
+};
+
+// Веса редкости для расчёта очков крафта
+export const RARITY_WEIGHTS: { [key: string]: number } = {
+  common: 1,
+  uncommon: 3,
+  rare: 10,
+  epic: 50,
+  legendary: 200,
+};
+
+// Расчёт очков крафта с учётом редкости
+export const calculateCraftScore = (craftedItems: { [materialId: string]: number }, materials: Material[]): number => {
+  let score = 0;
+  for (const [materialId, count] of Object.entries(craftedItems)) {
+    const material = materials.find(m => m.id === materialId);
+    if (material) {
+      const weight = RARITY_WEIGHTS[material.rarity] || 1;
+      score += count * weight;
+    }
+  }
+  return score;
 };
 
 // Reducer
@@ -434,13 +517,49 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         materialGain = 1;
       }
 
+      // Auto-buy upgrades
+      let newEssence = state.essence + dpsGain;
+      let newUpgrades = [...state.upgrades];
+      let newMaxEnergy = state.maxEnergy;
+      let newRegenRate = state.energyRegenRate;
+      let purchased = false;
+
+      for (let i = 0; i < newUpgrades.length; i++) {
+        const upgrade = newUpgrades[i];
+        if (state.autoBuyUpgrades[upgrade.id]) {
+          const cost = calculateUpgradeCost(upgrade);
+          if (newEssence >= cost) {
+            newEssence -= cost;
+            newUpgrades[i] = { ...upgrade, count: upgrade.count + 1 };
+            purchased = true;
+          }
+        }
+      }
+
+      // Recalculate energy stats if any upgrade was purchased
+      if (purchased) {
+        newMaxEnergy = 10;
+        newRegenRate = 400;
+        newUpgrades.forEach(u => {
+          if (u.type === 'energy_max') {
+            newMaxEnergy += u.value * u.count;
+          } else if (u.type === 'energy_regen') {
+            newRegenRate -= u.value * u.count;
+          }
+        });
+        newRegenRate = Math.max(80, newRegenRate);
+      }
+
       return {
         ...state,
-        essence: state.essence + dpsGain,
+        essence: newEssence,
         totalEssence: state.totalEssence + dpsGain,
         abilities: updatedAbilities,
         materials: newMaterials,
         totalMaterials: state.totalMaterials + materialGain,
+        upgrades: newUpgrades,
+        maxEnergy: newMaxEnergy,
+        energyRegenRate: newRegenRate,
         lastTickTime: Date.now(),
       };
     }
@@ -466,8 +585,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       newUpgrades[upgradeIndex] = { ...upgrade, count: upgrade.count + 1 };
 
       // Calculate new max energy and regen rate
-      let newMaxEnergy = 20;
-      let newRegenRate = 500;
+      let newMaxEnergy = 10;
+      let newRegenRate = 400;
       
       newUpgrades.forEach(u => {
         if (u.type === 'energy_max') {
@@ -477,8 +596,8 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         }
       });
       
-      // Minimum regen rate is 100ms
-      newRegenRate = Math.max(100, newRegenRate);
+      // Minimum regen rate is 80ms
+      newRegenRate = Math.max(80, newRegenRate);
 
       return {
         ...state,
@@ -506,10 +625,14 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       const ability = state.abilities[abilityIndex];
       if (!ability.isUnlocked || ability.currentCooldown > 0) return state;
 
+      // Получаем множитель DPS из текущего уровня
+      const dpsMultiplier = ability.dpsMultipliers[ability.dpsLevel] || 1;
       const dpc = calculateDpc(state);
-      const damageMultiplier = ability.baseDamageMultiplier + (ability.damagePerLevel * ability.level);
-      const damage = dpc * damageMultiplier;
-      const cooldown = ability.baseCooldown - (ability.cooldownReductionPerLevel * ability.level);
+      const damage = dpc * dpsMultiplier;
+      
+      // Рассчитываем кулдаун с учётом улучшений
+      const cooldownReduction = COOLDOWN_REDUCTIONS.slice(0, ability.cooldownLevel + 1).reduce((a, b) => a + b, 0);
+      const cooldown = Math.max(ability.baseCooldown - cooldownReduction, 0.5);
 
       const newAbilities = [...state.abilities];
       newAbilities[abilityIndex] = { ...ability, currentCooldown: cooldown };
@@ -522,20 +645,42 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       };
     }
 
-    case 'UPGRADE_ABILITY': {
+    case 'UPGRADE_ABILITY_DPS': {
       const abilityIndex = state.abilities.findIndex(a => a.id === action.abilityId);
       if (abilityIndex === -1) return state;
       
       const ability = state.abilities[abilityIndex];
-      if (!ability.isUnlocked || ability.level >= ability.maxLevel) return state;
-      if (state.rebirthPoints < ability.upgradeCost) return state;
+      if (!ability.isUnlocked || ability.dpsLevel >= 5) return state;
+      
+      const cost = ABILITY_UPGRADE_COSTS[ability.dpsLevel]; // Стоимость следующего уровня
+      if (state.rebirthPoints < cost) return state;
 
       const newAbilities = [...state.abilities];
-      newAbilities[abilityIndex] = { ...ability, level: ability.level + 1 };
+      newAbilities[abilityIndex] = { ...ability, dpsLevel: ability.dpsLevel + 1 };
 
       return {
         ...state,
-        rebirthPoints: state.rebirthPoints - ability.upgradeCost,
+        rebirthPoints: state.rebirthPoints - cost,
+        abilities: newAbilities,
+      };
+    }
+
+    case 'UPGRADE_ABILITY_COOLDOWN': {
+      const abilityIndex = state.abilities.findIndex(a => a.id === action.abilityId);
+      if (abilityIndex === -1) return state;
+      
+      const ability = state.abilities[abilityIndex];
+      if (!ability.isUnlocked || ability.cooldownLevel >= 5) return state;
+      
+      const cost = ABILITY_UPGRADE_COSTS[ability.cooldownLevel]; // Стоимость следующего уровня
+      if (state.rebirthPoints < cost) return state;
+
+      const newAbilities = [...state.abilities];
+      newAbilities[abilityIndex] = { ...ability, cooldownLevel: ability.cooldownLevel + 1 };
+
+      return {
+        ...state,
+        rebirthPoints: state.rebirthPoints - cost,
         abilities: newAbilities,
       };
     }
@@ -570,7 +715,9 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         essence: 0,
         totalEssence: 0,
         totalClicks: 0,
-        energy: state.maxEnergy,
+        energy: 10, // Reset to initial
+        maxEnergy: 10, // Reset to initial
+        energyRegenRate: 400, // Reset to initial
         upgrades: resetUpgrades,
         abilities: newAbilities,
         rebirthLevel: newRebirthLevel,
@@ -634,9 +781,15 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
         };
       }
 
+      // Track crafted items
+      const newCraftedItems = { ...state.craftedItems };
+      const resultMaterialId = recipe.result.materialId;
+      newCraftedItems[resultMaterialId] = (newCraftedItems[resultMaterialId] || 0) + recipe.result.count;
+
       return {
         ...state,
         materials: newMaterials,
+        craftedItems: newCraftedItems,
         energy: state.energy - recipe.energyCost,
         totalMaterials: state.totalMaterials + recipe.result.count,
       };
@@ -675,8 +828,54 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     }
 
     case 'LOAD_GAME': {
+      // Merge abilities with new structure (for migration from old saves)
+      const migratedAbilities = initialAbilities.map(initialAbility => {
+        const savedAbility = action.state.abilities?.find(a => a.id === initialAbility.id);
+        if (savedAbility && savedAbility.dpsMultipliers) {
+          // New format - use saved data
+          return savedAbility;
+        } else if (savedAbility) {
+          // Old format - migrate to new structure, keep unlocked status
+          return {
+            ...initialAbility,
+            isUnlocked: savedAbility.isUnlocked || false,
+          };
+        }
+        // No saved data - use initial
+        return initialAbility;
+      });
+
+      // Merge upgrades - keep count from save, but use new descriptions/values from initial
+      const migratedUpgrades = initialUpgrades.map(initialUpgrade => {
+        const savedUpgrade = action.state.upgrades?.find(u => u.id === initialUpgrade.id);
+        if (savedUpgrade) {
+          return {
+            ...initialUpgrade, // Use new description, value, baseCost, etc
+            count: savedUpgrade.count, // Keep player's progress
+          };
+        }
+        return initialUpgrade;
+      });
+
+      // Recalculate energy stats based on migrated upgrades
+      let newMaxEnergy = 10;
+      let newRegenRate = 400;
+      migratedUpgrades.forEach(u => {
+        if (u.type === 'energy_max') {
+          newMaxEnergy += u.value * u.count;
+        } else if (u.type === 'energy_regen') {
+          newRegenRate -= u.value * u.count;
+        }
+      });
+      newRegenRate = Math.max(80, newRegenRate);
+
       return {
         ...action.state,
+        abilities: migratedAbilities,
+        upgrades: migratedUpgrades,
+        maxEnergy: newMaxEnergy,
+        energyRegenRate: newRegenRate,
+        craftedItems: action.state.craftedItems || {},
         lastTickTime: Date.now(),
       };
     }

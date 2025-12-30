@@ -65,7 +65,7 @@ const About = () => {
             <span className="text-purple">Об</span> игре
           </h1>
           <p className="about-subtitle">
-            Всё, что нужно знать о Void Clicker
+            Всё, что нужно знать о Orjus
           </p>
         </div>
       </div>
@@ -76,10 +76,10 @@ const About = () => {
           <div className="intro-content">
             <div className="intro-text">
               <h2 className="section-heading">
-                Добро пожаловать в <span className="text-purple">Void Clicker</span>
+                Добро пожаловать в <span className="text-purple">Orjus</span>
               </h2>
               <p>
-                Void Clicker — это idle-кликер во вселенной Minecraft сервера Orjus Adventure. 
+                Orjus — это idle-кликер во вселенной Minecraft сервера Orjus. 
                 Собирай эссенцию пустоты, покупай улучшения и становись сильнее!
               </p>
               <p>
@@ -90,7 +90,7 @@ const About = () => {
             </div>
             <div className="intro-image">
               <div className="intro-logo void-logo">
-                <span className="logo-text">VC</span>
+                <span className="logo-text">O</span>
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@ const About = () => {
               </Link>
             </div>
             <p className="server-reference">
-              Часть вселенной сервера <a href="minecraft://play.orjus.ru">Orjus Adventure</a>
+              Часть вселенной сервера <a href="minecraft://play.orjus.ru">Orjus</a>
             </p>
           </div>
         </div>

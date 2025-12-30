@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { RARITY_WEIGHTS } from '../../context/GameContext';
 import './Leaderboard.css';
 
 interface LeaderboardEntry {
@@ -10,6 +11,7 @@ interface LeaderboardEntry {
   totalEssence: number;
   rebirthLevel: number;
   totalClicks: number;
+  craftScore: number;
   isCurrentUser: boolean;
 }
 
@@ -18,7 +20,7 @@ const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<'essence' | 'rebirth' | 'clicks'>('essence');
+  const [sortBy, setSortBy] = useState<'essence' | 'rebirth' | 'clicks' | 'craft'>('essence');
 
   useEffect(() => {
     loadLeaderboard();
@@ -55,6 +57,22 @@ const Leaderboard = () => {
       // Создаем map для быстрого поиска никнеймов
       const usersMap = new Map(users?.map(u => [u.id, u.nickname]) || []);
 
+      // Функция расчёта очков крафта
+      const calculateCraftScoreFromSave = (saveData: any): number => {
+        const craftedItems = saveData.craftedItems || {};
+        const materials = saveData.materials || [];
+        let score = 0;
+        
+        for (const [materialId, count] of Object.entries(craftedItems)) {
+          const material = materials.find((m: any) => m.id === materialId);
+          if (material) {
+            const weight = RARITY_WEIGHTS[material.rarity] || 1;
+            score += (count as number) * weight;
+          }
+        }
+        return score;
+      };
+
       // Парсим данные и создаем рейтинг
       const entries = saves
         .map(save => {
@@ -65,6 +83,7 @@ const Leaderboard = () => {
             totalEssence: saveData.totalEssence || 0,
             rebirthLevel: saveData.rebirthLevel || 0,
             totalClicks: saveData.totalClicks || 0,
+            craftScore: calculateCraftScoreFromSave(saveData),
             isCurrentUser: user?.id === save.user_id,
             rank: 0, // Will be set later
           };
@@ -75,6 +94,7 @@ const Leaderboard = () => {
       const sortField = 
         sortBy === 'essence' ? 'totalEssence' :
         sortBy === 'rebirth' ? 'rebirthLevel' :
+        sortBy === 'craft' ? 'craftScore' :
         'totalClicks';
 
       entries.sort((a, b) => (b as any)[sortField] - (a as any)[sortField]);
@@ -115,7 +135,7 @@ const Leaderboard = () => {
         <div className="leaderboard-header">
           <h1>🏆 Таблица лидеров</h1>
           <p className="leaderboard-subtitle">
-            Лучшие игроки Void Clicker
+            Лучшие игроки Orjus
           </p>
         </div>
 
@@ -137,6 +157,12 @@ const Leaderboard = () => {
             onClick={() => setSortBy('clicks')}
           >
             👆 По кликам
+          </button>
+          <button 
+            className={`sort-btn ${sortBy === 'craft' ? 'active' : ''}`}
+            onClick={() => setSortBy('craft')}
+          >
+            🔨 По крафту
           </button>
         </div>
 
@@ -171,6 +197,7 @@ const Leaderboard = () => {
                 {sortBy === 'essence' && 'Эссенция'}
                 {sortBy === 'rebirth' && 'Перерождения'}
                 {sortBy === 'clicks' && 'Клики'}
+                {sortBy === 'craft' && 'Очки крафта'}
               </div>
               <div className="col-extra">Доп. инфо</div>
             </div>
@@ -195,14 +222,18 @@ const Leaderboard = () => {
                       {sortBy === 'essence' && formatNumber(entry.totalEssence)}
                       {sortBy === 'rebirth' && entry.rebirthLevel}
                       {sortBy === 'clicks' && formatNumber(entry.totalClicks)}
+                      {sortBy === 'craft' && formatNumber(entry.craftScore)}
                     </span>
                   </div>
                   <div className="col-extra">
                     {sortBy !== 'rebirth' && (
                       <span className="extra-info">🔄 {entry.rebirthLevel}</span>
                     )}
-                    {sortBy !== 'clicks' && (
+                    {sortBy !== 'clicks' && sortBy !== 'craft' && (
                       <span className="extra-info">👆 {formatNumber(entry.totalClicks)}</span>
+                    )}
+                    {sortBy === 'craft' && (
+                      <span className="extra-info">💰 {formatNumber(entry.totalEssence)}</span>
                     )}
                   </div>
                 </div>

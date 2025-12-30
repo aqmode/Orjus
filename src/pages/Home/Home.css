@@ -266,7 +266,7 @@
 .stat-value {
   font-family: var(--font-minecrafter);
   font-size: 2.5rem;
-  color: var(--color-accent);
+  color: #aa55ff;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
 }
 

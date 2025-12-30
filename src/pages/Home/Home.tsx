@@ -89,11 +89,10 @@ const Home = () => {
 
         <div className="hero__content">
           <h1 className="hero__title animate-fade-in-down">
-            <span className="hero__title-void">Void</span>
-            <span className="hero__title-clicker">Clicker</span>
+            <span className="hero__title-void">Orjus</span>
           </h1>
           <p className="hero__subtitle animate-fade-in-up delay-200">
-            Idle-кликер во вселенной Orjus Adventure
+            Idle-кликер во вселенной Orjus
           </p>
           <p className="hero__description animate-fade-in-up delay-300">
             Собирай эссенцию пустоты, улучшай свои способности, 
@@ -112,7 +111,7 @@ const Home = () => {
               )}
             </div>
             <p className="hero__server-note">
-              Часть вселенной сервера <a href="minecraft://play.orjus.ru" className="server-link">Orjus Adventure</a>
+              Часть вселенной сервера <a href="minecraft://play.orjus.ru" className="server-link">Orjus</a>
             </p>
           </div>
         </div>
@@ -156,7 +155,7 @@ const Home = () => {
             <span className="text-accent">Что</span> в игре?
           </h2>
           <p className="section-subtitle text-center">
-            Void Clicker — глубокий idle-кликер с системой прогрессии
+            Orjus — глубокий idle-кликер с системой прогрессии
           </p>
 
           <div className="features-grid">

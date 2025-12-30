@@ -32,8 +32,7 @@ const Navbar = () => {
     <nav className={`navbar ${isScrolled ? 'navbar--scrolled' : ''}`}>
       <div className="navbar__container">
         <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-void">Void</span>
-          <span className="navbar__logo-accent">Clicker</span>
+          <span className="navbar__logo-accent">Orjus</span>
         </Link>
 
         <button 

@@ -209,6 +209,11 @@
 }
 
 /* Logo styles */
+.logo-orjus {
+  color: #ffaa00;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 170, 0, 0.4);
+}
+
 .logo-void {
   color: #aa55ff;
   text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
