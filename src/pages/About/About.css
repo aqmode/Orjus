@@ -1,0 +1,545 @@
+.about-page {
+  padding-top: 80px;
+}
+
+.about-page.loaded .mode-card,
+.about-page.loaded .timeline-item,
+.about-page.loaded .team-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero */
+.about-hero {
+  padding: 4rem 0;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-primary) 100%
+  );
+  border-bottom: 4px solid var(--color-border);
+}
+
+.about-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.about-subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+}
+
+/* Section Heading */
+.section-heading {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.section-description {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Intro Section */
+.intro-content {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.intro-text p {
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.intro-image {
+  display: flex;
+  justify-content: center;
+}
+
+.intro-logo {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  border: 6px solid var(--color-border);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+.logo-text {
+  font-family: var(--font-minecrafter);
+  font-size: 5rem;
+  color: #ffffff;
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4);
+}
+
+/* Game Modes */
+.game-modes {
+  background: var(--color-bg-secondary);
+  border-top: 4px solid var(--color-border);
+  border-bottom: 4px solid var(--color-border);
+}
+
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.mode-card {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.mode-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.mode-name {
+  font-family: var(--font-minecraft);
+  font-size: 1.5rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.mode-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.mode-features {
+  list-style: none;
+  text-align: left;
+}
+
+.mode-features li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.feature-bullet {
+  color: var(--color-gold);
+  font-size: 0.8rem;
+}
+
+/* Timeline */
+.timeline-section {
+  background: var(--color-bg-primary);
+}
+
+.timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  background: var(--color-border);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.timeline-item:nth-child(odd) {
+  flex-direction: row-reverse;
+}
+
+.timeline-marker {
+  position: relative;
+  z-index: 2;
+  background: var(--color-bg-primary);
+  padding: 0.5rem;
+}
+
+.timeline-year {
+  font-family: var(--font-minecrafter);
+  font-size: 1.25rem;
+  color: var(--color-accent);
+  background: var(--color-bg-secondary);
+  padding: 0.75rem 1.25rem;
+  border: 3px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  display: block;
+}
+
+.timeline-content {
+  flex: 1;
+  background: var(--color-bg-card);
+  padding: 1.5rem;
+  border: 3px solid var(--color-border);
+  border-radius: var(--border-radius);
+  margin: 0 2rem;
+  transition: all var(--transition-normal);
+}
+
+.timeline-content:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.timeline-title {
+  font-family: var(--font-minecraft);
+  font-size: 1.25rem;
+  color: var(--color-diamond);
+  margin-bottom: 0.5rem;
+}
+
+.timeline-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Team Section */
+.team-section {
+  background: var(--color-bg-secondary);
+  border-top: 4px solid var(--color-border);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.team-card {
+  background: var(--color-bg-card);
+  border: 3px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.team-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--border-radius);
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-minecrafter);
+  font-size: 2.5rem;
+  color: var(--color-bg-primary);
+  border: 3px solid var(--color-border);
+}
+
+.team-name {
+  font-family: var(--font-minecraft);
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.team-role {
+  font-family: var(--font-minecraft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.team-description {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+/* Join Section */
+.join-section {
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 50%,
+    var(--color-bg-primary) 100%
+  );
+  border-top: 4px solid var(--color-border);
+}
+
+.join-content {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.join-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.join-description {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.join-server-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.server-ip-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ip-label {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.ip-value {
+  font-family: var(--font-minecraft);
+  font-size: 1.5rem;
+  color: var(--color-gold);
+  background: var(--color-bg-secondary);
+  padding: 0.75rem 1.5rem;
+  border: 3px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+
+.version-info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 1024px) {
+  .modes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2.25rem;
+  }
+
+  .intro-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .intro-logo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .logo-text {
+    font-size: 3.5rem;
+  }
+
+  .modes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline::before {
+    left: 20px;
+  }
+
+  .timeline-item,
+  .timeline-item:nth-child(odd) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 50px;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: 0;
+  }
+
+  .timeline-content {
+    margin: 1rem 0 0 0;
+    width: 100%;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    font-size: 1.75rem;
+  }
+
+  .join-title {
+    font-size: 2rem;
+  }
+}
+
+/* New styles for Void Clicker About page */
+.void-logo {
+  background: linear-gradient(135deg, #aa55ff 0%, #6622aa 100%) !important;
+}
+
+.upgrades-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.upgrade-info-card {
+  background: var(--color-bg-tertiary);
+  border: 3px solid;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+
+.upgrade-info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.upgrade-info-icon {
+  font-size: 2rem;
+}
+
+.upgrade-info-header h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.upgrade-info-list {
+  list-style: none;
+  padding: 0;
+}
+
+.upgrade-info-list li {
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.upgrade-info-list li:last-child {
+  border-bottom: none;
+}
+
+.abilities-info-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.ability-info-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1.25rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.ability-info-card:hover {
+  border-color: #aa55ff;
+  transform: translateY(-4px);
+}
+
+.ability-info-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.ability-info-name {
+  font-size: 0.9rem;
+  color: #fff;
+  margin: 0.5rem 0;
+}
+
+.ability-info-mult {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--color-accent);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.ability-info-unlock {
+  font-size: 0.7rem;
+  color: #888;
+  display: block;
+}
+
+.join-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.server-reference {
+  color: #555;
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.server-reference a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.server-reference a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .upgrades-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .abilities-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

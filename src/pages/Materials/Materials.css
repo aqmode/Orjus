@@ -1,0 +1,371 @@
+.materials-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  padding-top: 100px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+}
+
+.materials-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.materials-header h1 {
+  color: #ffaa00;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  text-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+}
+
+.materials-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.stat-label {
+  color: #888;
+}
+
+.stat-value {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Tabs */
+.materials-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  background: #252525;
+  border: 2px solid #444;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tab-btn:hover {
+  border-color: #9945FF;
+  color: #fff;
+}
+
+.tab-btn.active {
+  background: #9945FF;
+  border-color: #9945FF;
+  color: #fff;
+}
+
+/* Materials Grid */
+.materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.material-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #252525;
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.material-card.empty {
+  opacity: 0.5;
+}
+
+.material-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.material-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  border-radius: 4px;
+}
+
+.material-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.material-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.material-rarity {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.material-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+/* Crafting Section */
+.crafting-section {
+  padding: 1rem 0;
+}
+
+.crafting-info-banner {
+  background: linear-gradient(135deg, rgba(153, 69, 255, 0.15) 0%, rgba(170, 85, 255, 0.1) 100%);
+  border: 2px solid rgba(153, 69, 255, 0.4);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.crafting-info-banner h3 {
+  color: #9945FF;
+  margin-bottom: 0.75rem;
+  font-size: 1.3rem;
+}
+
+.crafting-info-banner p {
+  color: #ccc;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.crafting-info-banner ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.crafting-info-banner li {
+  color: #aaa;
+  padding: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.crafting-info-banner strong {
+  color: #fff;
+}
+
+.crafting-hint {
+  text-align: center;
+  color: #888;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(153, 69, 255, 0.1);
+  border: 1px solid rgba(153, 69, 255, 0.3);
+  border-radius: 4px;
+}
+
+/* Recipes Grid */
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.recipe-card {
+  background: #252525;
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.recipe-card.available {
+  border-color: #9945FF;
+}
+
+.recipe-card.unavailable {
+  opacity: 0.7;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.recipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #333;
+}
+
+.recipe-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.recipe-energy {
+  color: #55ffff;
+  font-size: 0.9rem;
+}
+
+.recipe-description {
+  color: #aaa;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.recipe-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.recipe-materials {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.recipe-material {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: #1a1a1a;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.recipe-material.has-enough {
+  color: #55ff55;
+}
+
+.recipe-material.not-enough {
+  color: #ff5555;
+}
+
+.material-emoji {
+  font-size: 1.2rem;
+}
+
+.material-req {
+  font-weight: bold;
+  min-width: 50px;
+}
+
+.material-name-small {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.recipe-arrow {
+  color: #9945FF;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.recipe-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: rgba(255, 170, 0, 0.1);
+  border-radius: 4px;
+  min-width: 80px;
+}
+
+.result-emoji {
+  font-size: 2rem;
+}
+
+.result-count {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.result-name {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.craft-btn {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: #9945FF;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+.craft-btn:hover:not(.disabled) {
+  background: #b366ff;
+  transform: scale(1.02);
+}
+
+.craft-btn.disabled {
+  background: #444;
+  color: #666;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .materials-page {
+    padding-top: 80px;
+  }
+  
+  .materials-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .materials-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recipes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recipe-content {
+    flex-direction: column;
+  }
+  
+  .recipe-arrow {
+    transform: rotate(90deg);
+  }
+}

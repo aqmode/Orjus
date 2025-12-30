@@ -1,0 +1,250 @@
+.leaderboard-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  padding-top: 100px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+}
+
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.leaderboard-header h1 {
+  color: #ffaa00;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  text-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+}
+
+.leaderboard-subtitle {
+  color: #888;
+  font-size: 1.1rem;
+}
+
+/* Sort Tabs */
+.sort-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.sort-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #252525;
+  border: 2px solid #444;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  border-radius: 4px;
+}
+
+.sort-btn:hover {
+  border-color: #9945FF;
+  color: #fff;
+}
+
+.sort-btn.active {
+  background: #9945FF;
+  border-color: #9945FF;
+  color: #fff;
+}
+
+/* States */
+.loading-state,
+.error-state,
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #888;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #333;
+  border-top-color: #9945FF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-state p {
+  color: #ff5555;
+  margin-bottom: 1rem;
+}
+
+.retry-btn {
+  padding: 0.75rem 1.5rem;
+  background: #9945FF;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-family: inherit;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  background: #aa55ff;
+}
+
+/* Leaderboard Table */
+.leaderboard-table {
+  background: #252525;
+  border: 2px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 150px 150px;
+  gap: 1rem;
+  padding: 1rem;
+  background: #1a1a1a;
+  border-bottom: 2px solid #444;
+  color: #9945FF;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 150px 150px;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  transition: all 0.3s ease;
+  align-items: center;
+}
+
+.table-row:hover {
+  background: #2a2a2a;
+}
+
+.table-row.top-three {
+  background: linear-gradient(90deg, rgba(255, 170, 0, 0.05) 0%, transparent 100%);
+}
+
+.table-row.current-user {
+  background: linear-gradient(90deg, rgba(153, 69, 255, 0.15) 0%, transparent 100%);
+  border: 2px solid #9945FF;
+  border-left: none;
+  border-right: none;
+}
+
+.col-rank {
+  text-align: center;
+}
+
+.rank-badge {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.col-player {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-name {
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.you-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background: #9945FF;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+}
+
+.col-stat {
+  text-align: center;
+}
+
+.stat-value {
+  color: #55ff55;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.col-extra {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.extra-info {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* Refresh Button */
+.refresh-btn {
+  display: block;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  background: #252525;
+  border: 2px solid #9945FF;
+  color: #9945FF;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #9945FF;
+  color: white;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-header,
+  .table-row {
+    grid-template-columns: 60px 1fr 100px;
+    gap: 0.5rem;
+  }
+  
+  .col-extra {
+    display: none;
+  }
+  
+  .sort-tabs {
+    flex-direction: column;
+  }
+  
+  .sort-btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,685 @@
+.game-page {
+  min-height: 100vh;
+  padding: 1rem;
+  padding-top: 80px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+}
+
+/* Stats Panel */
+.stats-panel {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  animation: slideUp 0.5s ease;
+}
+
+.main-stat {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #444;
+  position: relative;
+}
+
+.main-stat .stat-value {
+  font-family: var(--font-minecraft);
+  font-size: 2.5rem;
+  display: block;
+  text-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+}
+
+.ability-damage-popup {
+  position: absolute;
+  top: 0;
+  right: 20%;
+  font-size: 1.5rem;
+  color: #ffff55;
+  text-shadow: 0 0 10px rgba(255, 255, 85, 0.8);
+  animation: floatUp 1.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.text-yellow {
+  color: #ffff55;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Manual Save Button */
+.manual-save-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #3a7bc8 0%, #2563a8 100%);
+  border: 2px solid #4a8bd8;
+  color: white;
+  font-family: var(--font-minecraft);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.manual-save-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4a8bd8 0%, #3673b8 100%);
+  border-color: #5a9be8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(58, 123, 200, 0.4);
+}
+
+.manual-save-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.manual-save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.manual-save-btn.success {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  border-color: #3edc81;
+}
+
+.manual-save-btn.error {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border-color: #f75c4c;
+}
+
+.manual-save-btn.saving {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Game Content */
+.game-content {
+  display: grid;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Click Section */
+.click-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.clicker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.click-button {
+  width: 200px;
+  height: 200px;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #3a3a3a 0%, #2a2a2a 100%);
+  border: 3px solid #9945FF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  box-shadow: 0 0 30px rgba(153, 69, 255, 0.3);
+}
+
+.click-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 0 50px rgba(153, 69, 255, 0.5);
+}
+
+.click-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.click-button.disabled {
+  border-color: #666;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.click-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.click-text {
+  font-family: 'Minecrafter', monospace;
+  font-size: 1.5rem;
+  color: #9945FF;
+}
+
+.click-damage {
+  font-size: 0.9rem;
+  color: #ffaa00;
+}
+
+.energy-bar {
+  width: 200px;
+  height: 24px;
+  background: #1a1a1a;
+  border: 2px solid #444;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #55ffff 0%, #00aaff 100%);
+  transition: width 0.3s ease;
+}
+
+.energy-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  text-shadow: 0 0 4px #000;
+}
+
+/* Abilities Section */
+.abilities-section {
+  width: 100%;
+}
+
+.abilities-section h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #ffaa00;
+}
+
+.abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.ability-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.ability-card:hover:not(.locked) {
+  border-color: #ffaa00;
+  transform: translateY(-2px);
+}
+
+.ability-card.locked {
+  opacity: 0.5;
+}
+
+.ability-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ability-icon {
+  font-size: 1.5rem;
+}
+
+.ability-name {
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.ability-level {
+  font-size: 0.7rem;
+  color: #aa55ff;
+  background: rgba(170, 85, 255, 0.2);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+.ability-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.ability-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.ability-stat-label {
+  color: #888;
+}
+
+.ability-stat-value {
+  color: #9945FF;
+  font-weight: bold;
+}
+
+.ability-cooldown-bar {
+  height: 4px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.cooldown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9945FF 0%, #aaff55 100%);
+  transition: width 0.1s linear;
+}
+
+.ability-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ability-use-btn {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+}
+
+.ability-use-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #9945FF 0%, #7B2FD6 100%);
+  color: #ffffff;
+}
+
+.ability-upgrade-btn {
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, #553399 0%, #442277 100%);
+  min-width: 60px;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ability-upgrade-btn.can-afford {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.ability-upgrade-btn.can-afford:hover {
+  background: linear-gradient(135deg, #aa55ff 0%, #8844dd 100%);
+}
+
+.ability-locked-info {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/* Upgrades Section */
+.upgrades-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.upgrades-column h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #444;
+}
+
+.upgrades-column:first-child h3 {
+  color: #9945FF;
+}
+
+.upgrades-column:last-child h3 {
+  color: #55ffff;
+}
+
+.upgrades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.upgrade-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #252525;
+  border: 2px solid #333;
+  border-radius: 4px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.upgrade-card.affordable {
+  border-color: #9945FF;
+}
+
+.upgrade-card.affordable:hover {
+  background: #2a2a2a;
+  transform: translateX(4px);
+}
+
+.upgrade-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.upgrade-name {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.upgrade-desc {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.upgrade-count {
+  font-size: 0.7rem;
+  color: #aa55ff;
+}
+
+.upgrade-buy-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+  white-space: nowrap;
+}
+
+.upgrade-card.affordable .upgrade-buy-btn {
+  background: linear-gradient(135deg, #55aa00 0%, #447700 100%);
+}
+
+.upgrade-card.affordable .upgrade-buy-btn:hover {
+  background: linear-gradient(135deg, #66cc00 0%, #559900 100%);
+}
+
+/* Auto-Buy Toggle */
+.upgrade-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.auto-buy-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auto-buy-toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 36px;
+  height: 18px;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #666;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s ease;
+}
+
+.auto-buy-toggle input:checked + .toggle-slider {
+  background: #2d5a1d;
+  border-color: #9945FF;
+}
+
+.auto-buy-toggle input:checked + .toggle-slider::before {
+  background: #9945FF;
+  left: 20px;
+  box-shadow: 0 0 8px rgba(153, 69, 255, 0.6);
+}
+
+.toggle-label {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.auto-buy-toggle input:checked ~ .toggle-label {
+  color: #9945FF;
+}
+
+.upgrade-card.auto-buy-active {
+  border-color: #2d5a1d;
+  background: linear-gradient(135deg, #1a2d15 0%, #1f2d1a 100%);
+}
+
+.upgrade-card.auto-buy-active.affordable {
+  border-color: #9945FF;
+}
+
+/* Rebirth Section */
+.rebirth-section {
+  background: linear-gradient(135deg, #2d1a3d 0%, #1a1025 100%);
+  border: 2px solid #aa55ff;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+
+.rebirth-section h3 {
+  color: #aa55ff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.rebirth-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rebirth-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.rebirth-stat {
+  text-align: center;
+}
+
+.rebirth-stat .label {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.25rem;
+}
+
+.rebirth-stat .value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.rebirth-info {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.rebirth-info p {
+  margin: 0.25rem 0;
+}
+
+.rebirth-btn {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #553388 0%, #442266 100%);
+  border: 2px solid #aa55ff;
+  margin: 0 auto;
+  display: block;
+}
+
+.rebirth-btn.ready {
+  animation: pulse 2s infinite;
+  background: linear-gradient(135deg, #7744aa 0%, #5533aa 100%);
+}
+
+.rebirth-btn.ready:hover {
+  background: linear-gradient(135deg, #aa55ff 0%, #8844dd 100%);
+  box-shadow: 0 0 30px rgba(170, 85, 255, 0.5);
+}
+
+/* Summary Section */
+.summary-section {
+  background: #252525;
+  border: 2px solid #444;
+  border-radius: 4px;
+  padding: 1.5rem;
+}
+
+.summary-section h3 {
+  margin-bottom: 1rem;
+  color: #55ffff;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-item .label {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.25rem;
+}
+
+.summary-item .value {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .upgrades-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .rebirth-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .game-page {
+    padding: 0.5rem;
+    padding-top: 70px;
+  }
+  
+  .click-button {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .click-icon {
+    font-size: 2rem;
+  }
+  
+  .click-text {
+    font-size: 1.2rem;
+  }
+  
+  .abilities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .main-stat .stat-value {
+    font-size: 1.8rem;
+  }
+}
+
+/* Animations */
+@keyframes clickPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.click-button:active:not(:disabled) {
+  animation: clickPulse 0.1s ease;
+}

@@ -1,0 +1,231 @@
+.profile-page {
+  min-height: 100vh;
+  padding: 2rem;
+  padding-top: 100px;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  display: flex;
+  justify-content: center;
+}
+
+.profile-loading {
+  font-size: 1.5rem;
+  color: #888;
+  text-align: center;
+  padding: 4rem;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.profile-title {
+  font-family: var(--font-minecrafter);
+  font-size: 2.5rem;
+  color: var(--color-accent);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.profile-title.setup-title {
+  color: #ffaa00;
+  margin-bottom: 0.5rem;
+}
+
+.profile-subtitle {
+  text-align: center;
+  color: #888;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
+  border: 3px solid #444;
+  border-radius: 4px;
+  padding: 2rem;
+}
+
+.profile-section {
+  margin-bottom: 1.5rem;
+}
+
+.profile-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-label .required {
+  color: #ff5555;
+}
+
+.profile-input,
+.profile-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-minecraft);
+  font-size: 1rem;
+  background: #1a1a1a;
+  border: 2px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.profile-input:focus,
+.profile-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px rgba(85, 255, 85, 0.3);
+}
+
+.profile-input.readonly {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* Avatar */
+.avatar-display {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.current-avatar {
+  font-size: 4rem;
+  display: inline-block;
+  background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+  border: 3px solid var(--color-accent);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  line-height: 94px;
+  box-shadow: 0 0 20px rgba(85, 255, 85, 0.3);
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+}
+
+.avatar-option {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avatar-option:hover {
+  border-color: #666;
+  transform: scale(1.1);
+}
+
+.avatar-option.selected {
+  border-color: var(--color-accent);
+  background: rgba(85, 255, 85, 0.1);
+  box-shadow: 0 0 10px rgba(85, 255, 85, 0.3);
+}
+
+/* Message */
+.profile-message {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.profile-message.success {
+  background: rgba(85, 255, 85, 0.1);
+  border: 2px solid var(--color-accent);
+  color: #aaffaa;
+}
+
+.profile-message.error {
+  background: rgba(255, 85, 85, 0.1);
+  border: 2px solid #ff5555;
+  color: #ffaaaa;
+}
+
+/* Actions */
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.profile-btn {
+  flex: 1;
+  padding: 1rem;
+  font-family: var(--font-minecraft);
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 3px solid;
+}
+
+.save-btn {
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  border-color: var(--color-accent-dark);
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(153, 69, 255, 0.5);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logout-btn {
+  background: linear-gradient(180deg, #553333 0%, #442222 100%);
+  border-color: #663333;
+  color: #ffaaaa;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(180deg, #664444 0%, #553333 100%);
+  box-shadow: 0 4px 15px rgba(255, 85, 85, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .avatar-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .profile-actions {
+    flex-direction: column;
+  }
+}

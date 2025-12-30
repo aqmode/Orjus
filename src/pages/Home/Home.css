@@ -1,0 +1,438 @@
+/* Hero Section */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero__video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(26, 26, 26, 1) 100%
+  );
+}
+
+.hero__content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+  z-index: 1;
+}
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero__title-main {
+  font-family: var(--font-minecrafter);
+  font-size: 5rem;
+  color: var(--color-text-primary);
+  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.7);
+  letter-spacing: 4px;
+}
+
+.hero__title-accent {
+  font-family: var(--font-minecrafter);
+  font-size: 3rem;
+  color: var(--color-accent);
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.7);
+  letter-spacing: 3px;
+}
+
+.hero__title-void {
+  font-family: var(--font-minecrafter);
+  font-size: 5rem;
+  color: #aa55ff;
+  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.7);
+  letter-spacing: 4px;
+}
+
+.hero__title-clicker {
+  font-family: var(--font-minecrafter);
+  font-size: 3rem;
+  color: var(--color-accent);
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.7);
+  letter-spacing: 3px;
+}
+
+.hero__subtitle {
+  font-family: var(--font-minecraft);
+  font-size: 1.5rem;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.hero__description {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hero__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero__server-note {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.hero__server-note .server-link {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.hero__server-note .server-link:hover {
+  text-decoration: underline;
+}
+
+.hero__ip-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero__ip-label {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.hero__ip-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-bg-secondary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: 3px solid var(--color-border);
+}
+
+.hero__ip {
+  font-family: var(--font-minecraft);
+  font-size: 1.25rem;
+  color: var(--color-gold);
+  letter-spacing: 1px;
+}
+
+.hero__copy-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  padding: 0.25rem;
+}
+
+.hero__copy-btn:hover {
+  transform: scale(1.2);
+}
+
+.hero__play-btn {
+  font-size: 1.25rem;
+  padding: 1rem 2.5rem;
+}
+
+.hero__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero__game-btn {
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(180deg, #aa55ff 0%, #7733cc 100%);
+  color: #fff;
+  border: 3px solid #7733cc;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-family: var(--font-minecraft);
+  text-transform: uppercase;
+}
+
+.hero__game-btn:hover {
+  background: linear-gradient(180deg, #bb66ff 0%, #8844dd 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(170, 85, 255, 0.4);
+  color: #fff;
+}
+
+.hero__scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: calc(50% - 50px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.hero__scroll-arrow {
+  font-size: 1.5rem;
+  color: var(--color-accent);
+}
+
+/* Stats Section */
+.stats-section {
+  background: var(--color-bg-secondary);
+  padding: 3rem 0;
+  border-top: 4px solid var(--color-border);
+  border-bottom: 4px solid var(--color-border);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (min-width: 1400px) {
+  .stats-grid {
+    max-width: 1400px;
+    padding: 0 4rem;
+    padding-left: calc(4rem + 170px);
+  }
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
+  width: 100%;
+}
+
+.stats-section.visible .stat-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-value {
+  font-family: var(--font-minecrafter);
+  font-size: 2.5rem;
+  color: var(--color-accent);
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
+.stat-label {
+  font-family: var(--font-minecraft);
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Features Section */
+.features-section {
+  background: var(--color-bg-primary);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.feature-card {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.features-section.visible .feature-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.feature-title {
+  font-family: var(--font-minecraft);
+  font-size: 1.25rem;
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.feature-description {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-primary) 50%,
+    var(--color-bg-secondary) 100%
+  );
+  border-top: 4px solid var(--color-border);
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.cta-section.visible .cta-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+.cta-description {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Mobile Styles */
+@media (max-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero__title-main {
+    font-size: 3.5rem;
+  }
+
+  .hero__title-accent {
+    font-size: 2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.25rem;
+  }
+
+  .hero__description {
+    font-size: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .cta-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__title-main {
+    font-size: 2.5rem;
+  }
+
+  .hero__title-accent {
+    font-size: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+}

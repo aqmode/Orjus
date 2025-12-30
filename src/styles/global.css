@@ -1,0 +1,344 @@
+/* Minecraft Fonts */
+@font-face {
+  font-family: 'Minecraft';
+  src: url('/fonts/minecraft.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Minecrafter';
+  src: url('/fonts/minecrafter.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* CSS Variables */
+:root {
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #2d2d2d;
+  --color-bg-tertiary: #3d3d3d;
+  --color-bg-card: #252525;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #888888;
+  --color-accent: #9945FF;
+  --color-accent-hover: #b366ff;
+  --color-accent-dark: #7B2FD6;
+  --color-gold: #ffaa00;
+  --color-diamond: #55ffff;
+  --color-redstone: #ff5555;
+  --color-purple: #9945FF;
+  --color-border: #4a4a4a;
+  --border-radius: 4px;
+  --border-radius-sm: 2px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --font-minecraft: 'Minecraft', 'Courier New', monospace;
+  --font-minecrafter: 'Minecrafter', 'Minecraft', 'Courier New', monospace;
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-minecraft);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-dark);
+  border: 2px solid var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+/* Links */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-minecrafter);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 3rem;
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  font-size: 2.25rem;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+}
+
+h3 {
+  font-size: 1.75rem;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.btn {
+  font-family: var(--font-minecraft);
+  padding: 12px 24px;
+  border: 3px solid var(--color-border);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+  color: #ffffff;
+  border-color: var(--color-accent-dark);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(153, 69, 255, 0.4);
+  background: linear-gradient(180deg, var(--color-accent-hover) 0%, var(--color-accent) 100%);
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, var(--color-bg-tertiary) 0%, var(--color-bg-secondary) 100%);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border-color: var(--color-accent);
+}
+
+/* Cards */
+.card {
+  background: var(--color-bg-card);
+  border: 3px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Section */
+.section {
+  padding: 5rem 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-accent);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-accent), 0 0 30px var(--color-accent);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s ease forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease forwards;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Delay utilities */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+
+/* Text utilities */
+.text-accent { color: var(--color-accent); }
+.text-gold { color: var(--color-gold); }
+.text-diamond { color: var(--color-diamond); }
+.text-redstone { color: var(--color-redstone); }
+.text-purple { color: var(--color-purple); }
+.text-center { text-align: center; }
+
+/* Minecraft-style decorative border */
+.mc-border {
+  border: 4px solid;
+  border-image: linear-gradient(
+    135deg,
+    var(--color-border) 25%,
+    var(--color-bg-tertiary) 25%,
+    var(--color-bg-tertiary) 50%,
+    var(--color-border) 50%,
+    var(--color-border) 75%,
+    var(--color-bg-tertiary) 75%
+  ) 1;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(30, 30, 30, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
